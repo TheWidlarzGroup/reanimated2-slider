@@ -40,10 +40,44 @@ const Slider2 = () => {
     }
   })
 
+  const backgroundStyle = useAnimatedStyle(() => {
+    const R = Math.round(
+      interpolate(
+        translateX.value,
+        [0, SLIDER_RANGE],
+        [129, 3],
+        Extrapolate.CLAMP,
+      ),
+    )
+    const G = Math.round(
+      interpolate(
+        translateX.value,
+        [0, SLIDER_RANGE],
+        [212, 169],
+        Extrapolate.CLAMP,
+      ),
+    )
+    const B = Math.round(
+      interpolate(
+        translateX.value,
+        [0, SLIDER_RANGE],
+        [250, 244],
+        Extrapolate.CLAMP,
+      ),
+    )
+
+    const backgroundColor = `rgb(${R},${G},${B})`
+    return {
+      backgroundColor,
+    }
+  })
+
   return (
     <>
       <View style={styles.slider}>
-        <Animated.View style={[styles.progress, progressStyle]} />
+        <Animated.View
+          style={[styles.progress, progressStyle, backgroundStyle]}
+        />
         <PanGestureHandler onGestureEvent={onGestureEvent}>
           <Animated.View style={[styles.knobContainer, scrollTranslationStyle]}>
             <Knob isSliding={isSliding} rotateStyle={rotateStyle} />
