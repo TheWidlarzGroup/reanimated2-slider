@@ -1,7 +1,11 @@
 import React from 'react'
 import {StyleSheet, View} from 'react-native'
-import {useSharedValue} from 'react-native-reanimated'
 import {shadowStyle} from './style'
+import Animated, {
+  useSharedValue,
+  useAnimatedGestureHandler,
+} from 'react-native-reanimated'
+import {PanGestureHandler} from 'react-native-gesture-handler'
 
 const SLIDER_WIDTH = 300
 const KNOB_WIDTH = 70
@@ -10,10 +14,25 @@ const Slider1 = () => {
   const translateX = useSharedValue(0)
   const isSliding = useSharedValue(false)
 
+  const onGestureEvent = useAnimatedGestureHandler({
+    onStart: (_, ctx) => {
+      ctx.offsetX = translateX.value
+    },
+    onActive: (event, ctx) => {
+      isSliding.value = true
+      translateX.value = event.translationX + ctx.offsetX
+    },
+    onEnd: () => {
+      isSliding.value = false
+    },
+  })
+
   return (
     <View style={styles.slider}>
       <View style={styles.progress} />
-      <View style={styles.knob} />
+      <PanGestureHandler onGestureEvent={onGestureEvent}>
+        <Animated.View style={styles.knob} />
+      </PanGestureHandler>
     </View>
   )
 }
