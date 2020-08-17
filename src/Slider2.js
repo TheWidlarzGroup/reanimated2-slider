@@ -1,7 +1,11 @@
 import React from 'react'
-import {StyleSheet, View, Text} from 'react-native'
+import {StyleSheet, View, Alert} from 'react-native'
 import {shadowStyle} from './style'
 import Knob from './Knob'
+import Animated from 'react-native-reanimated'
+import {PanGestureHandler} from 'react-native-gesture-handler'
+import {useSlider} from './useSlider'
+import AnimatedText from './AnimatedText'
 
 const SLIDER_WIDTH = 300
 const KNOB_WIDTH = 30
@@ -9,17 +13,29 @@ const STEP = 100
 const SLIDER_RANGE = SLIDER_WIDTH - KNOB_WIDTH
 
 const Slider2 = () => {
+  const onDragCompleteHandler = () => {
+    Alert.alert(stepText.value, String(translateX.value))
+  }
+
+  const {
+    onGestureEvent,
+    values: {translateX, isSliding, stepText},
+    styles: {scrollTranslationStyle, progressStyle},
+  } = useSlider(SLIDER_WIDTH, KNOB_WIDTH, onDragCompleteHandler, STEP)
+
   return (
     <>
       <View style={styles.slider}>
-        <View style={styles.progress} />
-        <View style={styles.knobContainer}>
-          <Knob />
-        </View>
+        <Animated.View style={[styles.progress, progressStyle]} />
+        <PanGestureHandler onGestureEvent={onGestureEvent}>
+          <Animated.View style={[styles.knobContainer, scrollTranslationStyle]}>
+            <Knob isSliding={isSliding} />
+          </Animated.View>
+        </PanGestureHandler>
       </View>
 
       <View style={{marginTop: 40}}>
-        <Text>0</Text>
+        <AnimatedText text={stepText} />
       </View>
     </>
   )
