@@ -4,6 +4,7 @@ import {shadowStyle} from './style'
 import Animated, {
   useSharedValue,
   useAnimatedGestureHandler,
+  useAnimatedStyle,
 } from 'react-native-reanimated'
 import {PanGestureHandler} from 'react-native-gesture-handler'
 
@@ -27,11 +28,21 @@ const Slider1 = () => {
     },
   })
 
+  const scrollTranslationStyle = useAnimatedStyle(() => {
+    return {transform: [{translateX: translateX.value}]}
+  })
+
+  const progressStyle = useAnimatedStyle(() => {
+    return {
+      width: translateX.value + KNOB_WIDTH,
+    }
+  })
+
   return (
     <View style={styles.slider}>
-      <View style={styles.progress} />
+      <Animated.View style={[styles.progress, progressStyle]} />
       <PanGestureHandler onGestureEvent={onGestureEvent}>
-        <Animated.View style={styles.knob} />
+        <Animated.View style={[styles.knob, scrollTranslationStyle]} />
       </PanGestureHandler>
     </View>
   )
