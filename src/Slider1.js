@@ -7,6 +7,7 @@ import Animated, {
   useAnimatedStyle,
 } from 'react-native-reanimated'
 import {PanGestureHandler} from 'react-native-gesture-handler'
+import {clamp} from './utils'
 
 const SLIDER_WIDTH = 300
 const KNOB_WIDTH = 70
@@ -21,7 +22,11 @@ const Slider1 = () => {
     },
     onActive: (event, ctx) => {
       isSliding.value = true
-      translateX.value = event.translationX + ctx.offsetX
+      translateX.value = clamp(
+        event.translationX + ctx.offsetX,
+        0,
+        SLIDER_WIDTH - KNOB_WIDTH,
+      )
     },
     onEnd: () => {
       isSliding.value = false
