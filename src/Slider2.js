@@ -2,7 +2,11 @@ import React from 'react'
 import {StyleSheet, View, Alert} from 'react-native'
 import {shadowStyle} from './style'
 import Knob from './Knob'
-import Animated from 'react-native-reanimated'
+import Animated, {
+  useAnimatedStyle,
+  interpolate,
+  Extrapolate,
+} from 'react-native-reanimated'
 import {PanGestureHandler} from 'react-native-gesture-handler'
 import {useSlider} from './useSlider'
 import AnimatedText from './AnimatedText'
@@ -23,13 +27,26 @@ const Slider2 = () => {
     styles: {scrollTranslationStyle, progressStyle},
   } = useSlider(SLIDER_WIDTH, KNOB_WIDTH, onDragCompleteHandler, STEP)
 
+  const rotateStyle = useAnimatedStyle(() => {
+    const rotate = interpolate(
+      translateX.value,
+      [0, SLIDER_RANGE],
+      [0, 8 * Math.PI],
+      Extrapolate.CLAMP,
+    )
+
+    return {
+      transform: [{rotate}],
+    }
+  })
+
   return (
     <>
       <View style={styles.slider}>
         <Animated.View style={[styles.progress, progressStyle]} />
         <PanGestureHandler onGestureEvent={onGestureEvent}>
           <Animated.View style={[styles.knobContainer, scrollTranslationStyle]}>
-            <Knob isSliding={isSliding} />
+            <Knob isSliding={isSliding} rotateStyle={rotateStyle} />
           </Animated.View>
         </PanGestureHandler>
       </View>

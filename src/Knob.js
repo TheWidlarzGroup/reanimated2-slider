@@ -2,7 +2,7 @@ import React from 'react'
 import {StyleSheet, View, Image} from 'react-native'
 import Animated, {useAnimatedStyle} from 'react-native-reanimated'
 
-const Knob = ({isSliding}) => {
+const Knob = ({isSliding, rotateStyle}) => {
   const knobUpStyle = useAnimatedStyle(() => {
     return {
       opacity: isSliding.value ? 1 : 0,
@@ -16,7 +16,7 @@ const Knob = ({isSliding}) => {
   })
 
   return (
-    <View style={styles.container}>
+    <Animated.View style={[styles.container, rotateStyle]}>
       <Animated.Image
         source={require('./assets/up.png')}
         style={[styles.image, knobUpStyle]}
@@ -25,7 +25,7 @@ const Knob = ({isSliding}) => {
         source={require('./assets/down.png')}
         style={[styles.image, knobDownStyle]}
       />
-    </View>
+    </Animated.View>
   )
 }
 
