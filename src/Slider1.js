@@ -1,5 +1,5 @@
 import React from 'react'
-import {StyleSheet, View} from 'react-native'
+import {StyleSheet, View, Alert} from 'react-native'
 import {shadowStyle} from './style'
 import Animated, {
   useSharedValue,
@@ -19,6 +19,10 @@ const Slider1 = () => {
   const translateX = useSharedValue(0)
   const isSliding = useSharedValue(false)
 
+  const onDraggedSuccess = () => {
+    Alert.alert('dragged')
+  }
+
   const onGestureEvent = useAnimatedGestureHandler({
     onStart: (_, ctx) => {
       ctx.offsetX = translateX.value
@@ -33,6 +37,10 @@ const Slider1 = () => {
     },
     onEnd: () => {
       isSliding.value = false
+
+      if (translateX.value > SLIDER_WIDTH - KNOB_WIDTH - 3) {
+        onDraggedSuccess()
+      }
     },
   })
 
