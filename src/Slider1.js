@@ -1,11 +1,15 @@
 import React from 'react'
 import {StyleSheet, View} from 'react-native'
+import {useSharedValue} from 'react-native-reanimated'
 import {shadowStyle} from './style'
 
 const SLIDER_WIDTH = 300
 const KNOB_WIDTH = 70
 
 const Slider1 = () => {
+  const translateX = useSharedValue(0)
+  const isSliding = useSharedValue(false)
+
   return (
     <View style={styles.slider}>
       <View style={styles.progress} />
